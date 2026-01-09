@@ -4,7 +4,12 @@
     "description": "Morelogin node for n8n",
     "license": "MIT",
     "homepage": "",
-    "keywords": ["n8n", "n8n-community-node-package", "n8n-community-node-package", "morelogin"],
+    "keywords": [
+        "n8n", 
+        "n8n-community-node-package", 
+        "n8n-community-node-package", 
+        "morelogin"
+    ],
     "author": {
         "name": "morelogin",
         "email": "developer@morelogin.com"
