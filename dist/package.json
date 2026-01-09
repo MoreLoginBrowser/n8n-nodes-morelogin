@@ -30,7 +30,7 @@
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": false,
+        "strict": true,
         "credentials": [
             "credentials/moreLoginOAuth2Api.credentials.ts"
         ],
