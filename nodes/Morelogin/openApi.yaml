@@ -1,0 +1,4313 @@
+openapi: 3.1.0
+info:
+  title: Open API
+  description: "The MoreLogin open API offers a comprehensive and developer-friendly RESTful interface that empowers you to programmatically manage browser profiles, cloud phones, and related resources—enabling seamless automation, scalability, and control.The MoreLogin open API runs on your machine and is accessible at:https://api.morelogin.com"
+  version: 1.0.0
+tags:
+  - name: Authorization
+  - name: Cloud Phone
+  - name: Cloud Phone/File Management
+  - name: Cloud Phone/App Management
+  - name: Cloud Phone/Schedules management
+  - name: Proxy Management
+  - name: Group Management
+  - name: Tag Management
+paths:
+  /oauth2/token:
+    post:
+      summary: Access Token
+      deprecated: false
+      description: ''
+      tags:
+        - Authorization
+      parameters:
+        - name: Content-Type
+          in: header
+          required: true
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  description: A API ID identifies an member
+                  type: string
+                client_secret:
+                  description: |
+                    A API Key authenticates a client ID. To call MoreLogin APIs, you'll
+                    exchange your API ID and API Key for an access token. Keep this
+                    secret safe.
+                  type: string
+                grant_type:
+                  description: Package name — required only if appVersionId is not provided
+                  type: string
+                  example: client_credentials
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+            example:
+              client_id: 1672940217990530
+              client_secret: client_secret
+              grant_type: client_credentials
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      scope:
+                        type: string
+                      access_token:
+                        type: string
+                      token_type:
+                        type: string
+                      expires_in:
+                        type: integer
+                      client_metadata:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                        required:
+                          - name
+                        x-apidog-orders:
+                          - name
+                        x-apidog-ignore-properties: []
+                    required:
+                      - scope
+                      - access_token
+                      - token_type
+                      - expires_in
+                      - client_metadata
+                    x-apidog-orders:
+                      - scope
+                      - access_token
+                      - token_type
+                      - expires_in
+                      - client_metadata
+                    x-apidog-ignore-properties: []
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+                x-apidog-orders:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+                x-apidog-ignore-properties: []
+              example:
+                code: 0
+                msg: null
+                data:
+                  scope: cloudphone
+                  access_token: |
+                    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNjU4MjYwNzYyNjA3OTU2IiwibmFtZSI6InpodXp1YmluNTU155qE5Zui6ZifIiwiZXhwIjoxNzY2ODkxNDY4LCJpYXQiOjE3NjY4ODc4Njh9.CJ_h-EQTG440qL-zSPcAockuw9PmBfyllyGZd0cmF0Q
+                  token_type: Bearer
+                  expires_in: 3600
+                  client_metadata:
+                    name: team name
+                requestId: 1d4f3ea968664593860b94b35d4ebf5e
+          headers: {}
+          x-apidog-name: 成功
+          x-apidog-ordering: 0
+      security: []
+  /oauth2/userinfo:
+    get:
+      summary: User Info
+      deprecated: false
+      description: ''
+      tags:
+        - Authorization
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      teamId:
+                        type: string
+                      teamName:
+                        type: string
+                      memberId:
+                        type: string
+                      memberNickName:
+                        type: string
+                      memberEmail:
+                        type: string
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: null
+                data:
+                  scope: cloudphone
+                  access_token: |
+                    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNjU4MjYwNzYyNjA3OTU2IiwibmFtZSI6InpodXp1YmluNTU155qE5Zui6ZifIiwiZXhwIjoxNzY2ODkxNDY4LCJpYXQiOjE3NjY4ODc4Njh9.CJ_h-EQTG440qL-zSPcAockuw9PmBfyllyGZd0cmF0Q
+                  token_type: Bearer
+                  expires_in: 3600
+                  client_metadata:
+                    name: team name
+                requestId: 1d4f3ea968664593860b94b35d4ebf5e
+          headers: {}
+      security: []
+  /cloudphone/uploadUrl:
+    post:
+      summary: Get file upload URL
+      deprecated: false
+      description: Upload temporary files through this interface, and the system will automatically delete them after 7 days
+      operationId: get
+      tags:
+        - Cloud Phone/File Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Cloud phone ID
+                fileName:
+                  type: string
+                  description: Upload file name
+            example:
+              fileName: "example.jpg"
+              id: 0
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: |
+                      error message
+                  data:
+                    type: object
+                    properties:
+                      presignedUrl:
+                        type: string
+                        description: File upload URL use https PUT uploading files to cloud storage
+                    required:
+                      - presignedUrl
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+          headers: {}
+      security: []
+  /cloudphone/uploadFile:
+    post:
+      summary: Uploading files
+      deprecated: false
+      description: ""
+      operationId: fileUploadUsing
+      tags:
+        - Cloud Phone/File Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Cloud phone ID
+                  type: string
+                  example: '1661515884160372'
+                url:
+                  type: string
+                  description: upload file url 
+                  example: https://example.com/test.jpg
+                uploadDest:
+                  description: Upload destination directory
+                  type: string
+                  example: /Download
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      fileId:
+                        type: string
+                        description: Uploaded file ID
+                      id:
+                        type: cloud phone ID
+                      status:
+                        type: integer
+                        description: Upload status 0:uploading 1:success 2:failed
+                    required: 
+                      - fileId
+                      - id
+                      - status
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: null
+                data:
+                  fileId: "1661515884160111"
+                  id: 1661515884160372
+                  status: 1
+                requestId: 1d4f3ea968664593860b94b35d4ebf5e
+          headers: {}
+      security: []
+  /cloudphone/uploadFileResult:
+    post:
+      summary: uploadFile result
+      deprecated: false
+      description: ""
+      operationId: fileUploadResult
+      tags:
+        - Cloud Phone/File Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Cloud phone ID
+                  type: string
+                  example: '1661515884160372'
+                fileId:
+                  type: string
+                  description: Uploaded file ID
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: cloud phone ID
+                      fileId:
+                        type: string
+                        description: Uploaded file ID
+                      status:
+                        type: integer
+                        description: Upload status 0:uploading 1:success 2:failed
+                    required: 
+                      - fileId
+                      - id
+                      - status
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: null
+                data:
+                  id: 1661515884160372
+                  fileId: "1661515884160111"
+                  status: 1
+                requestId: 1d4f3ea968664593860b94b35d4ebf5e
+          headers: {}
+      security: []
+  /cloudphone/download:
+    post:
+      summary: File download
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/File Management
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: cloud phone id
+                filePath:
+                  type: string
+                  description: |
+                    file path: /sdcard/Download/a.txt
+              required:
+                - filePath
+                - id
+            example:
+              filePath: ''
+              id: 0
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Cloud phone id
+                      downId:
+                        type: integer
+                        description: 'File download id '
+                    required:
+                      - id
+                      - downId
+                required:
+                  - code
+                  - msg
+                  - data
+              example:
+                code: 0
+                msg: ''
+                data:
+                  id: 0
+                  downId: 0
+          headers: {}
+      security: []
+  /cloudphone/download/result:
+    post:
+      summary: File download result
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/File Management
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: cloud phone id
+                downId:
+                  type: integer
+                  description: file download id
+              required:
+                - downId
+                - id
+            example:
+              downId: 0
+              id: 0
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: >-
+                          Download file status;10:Running, 20:Successful,
+                          30:Failed, 40:Cancelled
+                      downUrl:
+                        type: string
+                        description: File download url
+                    required:
+                      - status
+                      - downUrl
+                  requestId:
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: null
+                data:
+                  status: 20
+                  downUrl: https://get.morelogin.com/...
+                requestId: 17d9dbfd958e4f40a51897520138d3ff
+          headers: {}
+      security: []
+  /cloudphone/setKeyBox:
+    post:
+      summary: Set Keybox
+      deprecated: false
+      description: ""
+      tags:
+        - Cloud Phone/File Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                  description: File path, e.g., /sdcard/Download/xxx.xml
+                id:
+                  type: integer
+                  description: Cloud phone ID
+            example:
+              filePath: ""
+              id: 0
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 'Response code: 0 = success, >0 = error'
+                  msg:
+                    type: string
+                  data:
+                    type: boolean
+          headers: {}
+      security: []
+  /cloudphone/app/install:
+    post:
+      summary: Install app on cloud phone
+      deprecated: false
+      description: ""
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appVersionId:
+                  description: App version ID
+                  type: string
+                id:
+                  description: Cloud phone ID
+                  type: integer
+                packageName:
+                  description: Package name — required only if appVersionId is not provided
+                  type: string
+                versionCode:
+                  description: Version code — required only if appVersionId is not provided
+                  type: integer
+              required:
+                - id
+            example:
+              appVersionId: '1672940217990530'
+              id: 1673823102599682
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: boolean
+                  requestId:
+                    type: string
+          headers: {}
+      security: []
+  /cloudphone/app/page:
+    post:
+      summary: Get APP application list
+      deprecated: false
+      description: Fetch APP application list
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appName:
+                  description: App name (partial match)
+                  type: string
+                pageNum:
+                  description: 'Page number; Default:1'
+                  type: integer
+                pageSize:
+                  description: 'Items per page; Default:10'
+                  type: integer
+            example:
+              appName: de
+              pageNum: 1
+              pageSize: 10
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: string
+                      current:
+                        type: string
+                      pages:
+                        type: string
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties: {}
+                  requestId:
+                    type: string
+          headers: {}
+      security: []
+  /cloudphone/app/installedList:
+    post:
+      summary: Query installed apps list
+      deprecated: false
+      description: Query list of installed apps on a cloud phone
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Cloud phone ID
+                  type: integer
+              required:
+                - id
+            example:
+              id: 1674550360293464
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: 'null'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        appName:
+                          type: string
+                        appIcon:
+                          type: string
+                        packageName:
+                          type: string
+                        versionCode:
+                          type: string
+                        versionName:
+                          type: string
+                  requestId:
+                    type: string
+          headers: {}
+      security: []
+  /cloudphone/app/start:
+    post:
+      summary: Launch APP
+      deprecated: false
+      description: Launch an installed app on the cloud phone
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Cloud phone ID
+                  type: integer
+                packageName:
+                  description: App package name
+                  type: string
+              required:
+                - id
+                - packageName
+            example: 
+              id: 1674550360293464
+              packageName: "com.depop"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: 'null'
+                  requestId:
+                    type: string
+          headers: {}
+      security: []
+  /cloudphone/app/restart:
+    post:
+      summary: Restart APP
+      deprecated: false
+      description: ""
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Cloud phone ID
+                packageName:
+                  type: string
+                  description: App package name
+            example:
+              id: 0
+              packageName: ""
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code:0 = success, >0 = error
+                  msg:
+                    type: string
+                    description: Response msg, Error message returned if code > 0
+                  data:
+                    type: boolean
+                required:
+                  - msg
+          headers: {}
+      security: []
+  /cloudphone/app/stop:
+    post:
+      summary: Stop APP
+      deprecated: false
+      description: ""
+      tags:
+        - Cloud Phone/App Management
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Cloud phone ID
+                packageName:
+                  type: string
+                  description: App package name
+            example:
+              id: 0
+              packageName: ""
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 'Response code: 0 = success, >0 = error'
+                  data:
+                    type: boolean
+                  msg:
+                    type: string
+                    description: Message; populated if code > 0
+          headers: {}
+      security: []
+  /cloudphone/app/uninstall:
+    post:
+      summary: Uninstall APP
+      deprecated: false
+      description: ""
+      tags:
+        - Cloud Phone/App Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Cloud phone ID
+                packageName:
+                  type: string
+                  description: App package name
+            example:
+              id: 0
+              packageName: ""
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 'Response code: 0 = success, >0 = error'
+                  data:
+                    type: boolean
+                  msg:
+                    type: string
+                    description: Message; populated if code > 0
+          headers: {}
+      security: []
+  /cloudphone/page:
+    post:
+      summary: Getting a list of cloud phone profiles
+      operationId: pageUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bindIp:
+                  type: boolean
+                  description: 'Whether IP is bound: true = bound, false = not'
+                  example: false
+                keyword:
+                  type: string
+                  description: 'Keyword to filter: proxy info, group name, tag name, environment name'
+                  example: "CP-424"
+                pageNo:
+                  type: integer
+                  format: int64
+                  description: Current page
+                  example: 1
+                pageSize:
+                  type: integer
+                  format: int64
+                  description: Items per page
+                  example: 100
+                sort:
+                  type: array
+                  description: 'Dynamic sort fields. Currently only "envName" is supported for cloud phones.'
+                  items:
+                    type: object
+                    properties:
+                      sortDirection:
+                        type: string
+                        enum: [asc, desc]
+                        description: Sort direction
+                        example: "asc"
+                      sortField:
+                        type: string
+                        description: Field to sort by (only "envName" is currently supported)
+                        example: "envName"
+                    required:
+                      - sortDirection
+                      - sortField
+                  example:
+                    - sortDirection: "asc"
+                      sortField: "envName"
+              example:
+                bindIp: false
+                keyword: "CP-424"
+                pageNo: 1
+                pageSize: 100
+                sort:
+                  - sortDirection: "asc"
+                    sortField: "envName"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: error message
+                  data:
+                    type: object
+                    properties:
+                      current:
+                        type: integer
+                      dataList:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CloudPhoneProfile'
+                      pages:
+                        type: integer
+                      total:
+                        type: integer
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+
+  /cloudphone/create:
+    post:
+      summary: Creating a Cloud Phone Profile
+      operationId: createUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skuId:
+                  type: string
+                  description: |
+                    Cloud Phone model
+                    skuId:10002 model:Android 12
+                    skuId:10013 model:Android 13
+                    skuId:10005 model:Android 14
+                    skuId:10004 model:Android 15
+                    skuId:10014 model:Android 15A
+                    Refer to the appendix for a detailed description of the model's parameters
+                quantity:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  description: Number of cloud phone created. Range of values:[1-10]
+                envRemark:
+                  type: string
+                  maxLength: 1500
+                  description: Profile Remarks (Length limit 1500 characters)
+                automaticGeo:
+                  type: boolean
+                  description: Whether to automatically match the geographic location. Default:true
+                automaticLanguage:
+                  type: boolean
+                  description: Whether to automatically match the language. Default:true
+                automaticLocation:
+                  type: boolean
+                  description: Whether to auto-match location (time zone, country). Default:true
+                country:
+                  type: string
+                  description: Country, e.g. us. Check appendix for country code details
+                timezone:
+                  type: string
+                  description: Time zone, e.g. America/New_York
+                language:
+                  type: string
+                  description: Language, e.g. en-US
+                altitude:
+                  type: integer
+                latitude:
+                  type: number
+                  description: Latitude. Example:22.309182
+                longitude:
+                  type: number
+                  description: Longitude. Example:114.176817
+                proxyId:
+                  type: integer
+                  format: int64
+                  description: Proxy ID
+              required:
+                - skuId
+                - quantity
+                - altitude
+              example:
+                skuId: "10002"
+                envRemark: "Remark added at creation"
+                groupId: "1565859744475508"
+                automaticGeo: false
+                automaticLanguage: false
+                automaticLocation: false
+                country: "au"
+                timezone: "Australia/Currie"
+                language: "de-AT"
+                altitude: 1980
+                latitude: 83.73
+                longitude: 106.49
+                proxyId: 1634660919386770
+                quantity: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: string
+                    nullable: true
+                  data:
+                    type: array
+                    items:
+                      type: string
+                  requestId:
+                    type: string
+                  error:
+                    type: object
+                    properties: {}
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/powerOn:
+    post:
+      summary: Startup cloud phone
+      operationId: powerOnUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+              required:
+                - id
+            example:
+              id: 1637226321190925
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: Error message
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/powerOff:
+    post:
+      summary: Shut down the cloud phone
+      operationId: powerOffUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+              required:
+                - id
+            example:
+              id: 1596527092376632
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: Error message
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/edit/batch:
+    post:
+      summary: Modify the cloud phone profile
+      operationId: editBatchUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  description: Cloud phone IDs
+                proxyId:
+                  type: integer
+                  format: int64
+                  description: Proxy ID
+                groupId:
+                  type: integer
+                  format: int64
+                  description: Environment group ID
+                tagIds:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  description: Environment tag IDs
+                tagOps:
+                  type: string
+                  enum: [ADD, UPDATE, CLEAR]
+                  description: Tag operation
+                envRemark:
+                  type: string
+                  maxLength: 1500
+                  description: Environment remark (≤1500 chars, line breaks supported)
+                automaticGeo:
+                  type: boolean
+                  description: Auto geolocation
+                automaticLanguage:
+                  type: boolean
+                  description: Auto language
+                automaticLocation:
+                  type: boolean
+                  description: Auto location (timezone & country)
+                country:
+                  type: string
+                  description: Country
+                timezone:
+                  type: string
+                  description: Timezone
+                language:
+                  type: string
+                  description: Language
+                altitude:
+                  type: number
+                  description: Altitude
+                latitude:
+                  type: number
+                  description: Latitude
+                longitude:
+                  type: number
+                  description: Longitude
+              required:
+                - id
+            example:
+              id:
+                - 1637238770951311
+              proxyId: 0
+              automaticGeo: false
+              automaticLanguage: false
+              automaticLocation: false
+              country: bo
+              timezone: America/La_Paz
+              language: de-CH
+              latitude: 0
+              longitude: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code:0,Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: Error message
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/delete/batch:
+    post:
+      summary: Delete cloud phone profile
+      operationId: deleteUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: 'Token for request access token interface response access_token field'
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - ids
+            example:
+              ids:
+                - '1595755686723985'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: Error message
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/newMachine:
+    post:
+      summary: One-click new cloud phone
+      operationId: oneNewUsingPOST
+      tags:
+        - Cloud Phone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: Cloud phone ID
+                brand:
+                  type: string
+                  description: Brand
+                modelId:
+                  type: integer
+                  description: Model ID
+            example:
+              id: 1595372958075305
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 'Response code:0 indicates success, >0 indicates failure'
+                  msg:
+                    type: string
+                required:
+                  - code
+                  - msg
+
+  /cloudphone/info:
+    post:
+      summary: Cloud phone - single device details
+      operationId: infoUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: Cloud phone ID
+              required:
+                - id
+            example:
+              id: 1672532391231745
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    nullable: true
+                    example: null
+                  data:
+                    $ref: '#/components/schemas/CloudPhoneDetail'
+                  requestId:
+                    type: string
+                    example: "4d0f4fa68613441e9a11446a6437bb5a"
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+
+  /cloudphone/brand/models:
+    post:
+      summary: Query brand & model list
+      description: Query available brand & model list for given Android version
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skuId:
+                  type: integer
+                  description: Cloud phone product ID
+              required:
+                - skuId
+            example:
+              skuId: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: string
+                  requestId:
+                    type: string
+                  timestamp:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        brand:
+                          type: string
+                        model:
+                          type: string
+
+  /cloudphone/updateAdb:
+    post:
+      summary: Update cloud phone ADB status
+      operationId: updateAdbUsingPOST
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enableAdb:
+                  type: boolean
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+              required:
+                - enableAdb
+                - ids
+            example:
+              enableAdb: true
+              ids:
+                - 1633612946805630
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Return result code 0:Normal Other codes are exceptions.
+                  msg:
+                    type: string
+                    description: Error message
+                  requestId:
+                    type: string
+                    description: Operation Request ID
+                required:
+                  - code
+                  - msg
+                  - requestId
+
+  /cloudphone/exeCommand:
+    post:
+      summary: Execute shell command
+      operationId: executeShellCommand
+      tags:
+        - Cloud Phone
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: Cloud phone ID
+                command:
+                  type: string
+                  description: Shell command to execute
+              required:
+                - id
+                - command
+            example:
+              command: am start -n com.android.chrome/com.google.android.apps.chrome.Main
+              id: 1674153897828425
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: 'Response code: 0 indicates success, >0 indicates failure'
+                  data:
+                    type: string
+                    description: Response Information
+                  msg:
+                    type: string
+                    description: Response message:An error message will be returned when code is greater than 0
+                required:
+                  - code
+                  - data
+                  - msg
+  /cloudphone/rpa/template/market/page:
+    post:
+      summary: Get market template pages
+      deprecated: false
+      description: Query Schedules market template, template name supports fuzzy query
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                searchKey:
+                  type: string
+                  description: Template Name
+                  nullable: true
+                pageNo:
+                  type: integer
+                  description: Default:1
+                  nullable: true
+                pageSize:
+                  type: integer
+                  description: Default:10
+                  nullable: true
+            example:
+              pageNo: 0
+              pageSize: 0
+              searchWords: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: object
+                    properties:
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            title:
+                              type: string
+                              description: Market template title
+                            parameter:
+                              type: string
+                              description: Template parameter JSON string
+                            description:
+                              type: string
+                              description: Market template Description
+                            appIconUrls:
+                              type: array
+                              items:
+                                type: string
+                            sort:
+                              type: integer
+                              description: sort
+                            author:
+                              type: string
+                              description: author
+                            updateDate:
+                              type: string
+                              description: Last update time
+                          required:
+                            - parameter
+                      current:
+                        type: integer
+                        description: Current page number
+                      pages:
+                        type: integer
+                        description: Total pages
+                      total:
+                        type: integer
+                        description: Total count
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ''
+                data:
+                  current: 0
+                  dataList:
+                    - appIconUrls: []
+                      author: ''
+                      description: ''
+                      parameter: ''
+                      id: 0
+                      sort: 0
+                      title: ''
+                      type: 0
+                      updateDate: ''
+                  pages: 0
+                  total: 0
+          headers: {}
+      security: []
+  /cloudphone/rpa/template/personal/page:
+    post:
+      summary: Get Personal template pages
+      deprecated: false
+      description: Query Schedules market template, template name supports fuzzy query
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                searchKey:
+                  type: string
+                  description: Template name
+                  nullable: true
+                desc:
+                  type: string
+                  description: Template description
+                pageNo:
+                  type: integer
+                  description: Default:1
+                  nullable: true
+                pageSize:
+                  type: integer
+                  description: Default:10
+                  nullable: true
+            example:
+              pageNo: 1
+              pageSize: 10
+              searchWords: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: object
+                    properties:
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            title:
+                              type: string
+                              description: Market template title
+                            parameter:
+                              type: string
+                              description: Template parameter JSON string
+                            description:
+                              type: string
+                              description: Market template Description
+                            appIconUrls:
+                              type: array
+                              items:
+                                type: string
+                            sort:
+                              type: integer
+                              description: sort
+                            updateDate:
+                              type: string
+                              description: Last update time
+                      current:
+                        type: integer
+                        description: Current page number
+                      pages:
+                        type: integer
+                        description: Total pages
+                      total:
+                        type: integer
+                        description: Total count
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ''
+                data:
+                  current: 0
+                  dataList:
+                    - id: 0
+                      title: ''
+                      appIconUrls: []
+                      author: ''
+                      description: ''
+                      parameter: ''
+                      sort: 0
+                      updateDate: ''
+                  pages: 0
+                  total: 0
+          headers: {}
+      security: []
+  /cloudphone/rpa/task/page:
+    post:
+      summary: Get a schedules list
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+        - name: enabled
+          in: query
+          description: Is the plan enabled
+          required: false
+          example: 'false'
+          schema:
+            type: boolean
+            nullable: true
+        - name: mainTaskName
+          in: query
+          description: plan name
+          required: false
+          schema:
+            type: string
+            maxLength: 150
+            minLength: 1
+            nullable: true
+        - name: taskState
+          in: query
+          description: >-
+            Plan status; 0:awaiting execution; 1:Executing; 2:Execution
+            completed 3:Cancel
+          required: false
+          schema:
+            type: integer
+            maximum: 3
+            nullable: true
+        - name: templateTitle
+          in: query
+          description: Template Title
+          required: false
+          schema:
+            type: string
+            maxLength: 150
+            minLength: 0
+            nullable: true
+        - name: pageNo
+          in: query
+          description: default:1
+          required: false
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: default:20
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  description: Is the plan enabled
+                  nullable: true
+                taskName:
+                  type: string
+                  description: Plan name
+                  nullable: true
+                templateTitle:
+                  type: string
+                  description: Template title
+                  nullable: true
+                taskState:
+                  type: integer
+                  description: |
+                    Schedule status; 0:awaiting execution; 1:Executing; 2:Execution completed 3:Cancel
+                  nullable: true
+                pageNo:
+                  type: integer
+                  description: default:1
+                  nullable: true
+                pageSize:
+                  type: integer
+                  description: default:10
+                  nullable: true
+            example: |-
+              {
+                  "pageNo": 1,
+                  "pageSize": 10,
+              }
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: object
+                    properties:
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Schedule id
+                            taskName:
+                              type: string
+                              description: Schedule Task name
+                            createMember:
+                              type: string
+                              description: Member name
+                            enabled:
+                              type: boolean
+                              description: Whether enabled
+                            endTime:
+                              type: string
+                              description: Task end time
+                            failCount:
+                              type: integer
+                              description: Number of failed executions
+                            handleTime:
+                              type: string
+                              description: Execution start time
+                            notes:
+                              type: string
+                              description: schedule notes
+                            scheduleConfig:
+                              type: string
+                              description: Task schedule configuration
+                            successCount:
+                              type: integer
+                              description: Number of successful executions
+                            taskPreviewTimeTable:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  cloudPhoneId:
+                                    type: integer
+                                    description: Cloud phone ID
+                                  cloudPhoneName:
+                                    type: string
+                                    description: Cloud phone name
+                                  times:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: List of execution times
+                            taskState:
+                              type: integer
+                              description: >-
+                                Schedule Task state. 0:waiting; 1:running;
+                                2:completed 3:Cancel
+                            templateId:
+                              type: integer
+                              description: Template id
+                            templateTitle:
+                              type: string
+                              description: Template title
+                          required:
+                            - createMember
+                        description: Plan list
+                      current:
+                        type: integer
+                        description: Current page number
+                      pages:
+                        type: integer
+                        description: Total pages
+                      total:
+                        type: integer
+                        description: Total count
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                required:
+                  - code
+                  - data
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                data:
+                  current: 0
+                  dataList:
+                    - createMember: ''
+                      enabled: true
+                      endTime: ''
+                      failCount: 0
+                      handleTime: ''
+                      id: 0
+                      notes: ''
+                      scheduleConfig: ''
+                      successCount: 0
+                      taskName: ''
+                      taskPreviewTimeTable:
+                        - billingType: 0
+                          cloudPhoneId: 0
+                          cloudPhoneName: ''
+                          times:
+                            - ''
+                      taskState: 0
+                      templateId: 0
+                      templateTitle: ''
+                  pages: 0
+                  total: 0
+                msg: ''
+          headers: {}
+      security: []
+  /cloudphone/rpa/task/save:
+    post:
+      summary: Creating a schedule
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskName:
+                  type: string
+                  description: Task name
+                templateId:
+                  type: integer
+                  description: Template ID
+                templateType:
+                  type: string
+                  description: Template type. PERSONAL:personal; MARKET:marketplace
+                taskType:
+                  type: string
+                  description: Task type. TEMPORARY or SCHEDULED
+                notes:
+                  type: string
+                  description: Plan notes
+                cloudPhoneConfigs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      cloudPhoneId:
+                        type: integer
+                        description: Cloud phone ID
+                      triggerTime:
+                        type: string
+                        description: Task execution time, UTC+0 time zone
+                      templateParameter:
+                        type: string
+                        description: Template parameters
+                    required:
+                      - cloudPhoneId
+                      - triggerTime
+                      - templateParameter
+                  description: Collection of cloud phone schedule configurations
+                scheduleConfig:
+                  type: object
+                  properties:
+                    endTime:
+                      type: string
+                      description: date-time
+                    scheduleType:
+                      type: string
+                      description: Schedule type. ONCE:one-time; DAILY:daily
+                    timezone:
+                      type: string
+                      description: Timezone
+                  required:
+                    - endTime
+                    - scheduleType
+                    - timezone
+                  description: Task schedule configuration
+              required:
+                - cloudPhoneConfigs
+                - scheduleConfig
+                - taskName
+                - taskType
+                - templateId
+                - templateType
+            example:
+              cloudPhoneConfigs:
+                - cloudPhoneId: 1678331966138097
+                  templateParameter: {"keyword":"abc"}
+                  triggerTime: 2025-12-29 23:00:00
+              notes: notes test
+              scheduleConfig:
+                endTime: 2025-12-30 00:00:00
+                scheduleType: ONCE
+              taskName: test
+              templateId: 1678347487160296
+              templateType: PERSONAL
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: integer
+                    description: Schedules id
+                required:
+                  - code
+                  - data
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                data: 0
+                msg: ''
+          headers: {}
+      security: []
+  /cloudphone/rpa/task/cancel:
+    post:
+      summary: Cancel schedule
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+        - name: id
+          in: query
+          description: ''
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Plan id
+              required:
+                - id
+            example:
+              id: 1678919049331329
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                required:
+                  - code
+                  - data
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                data: null
+                msg: ''
+          headers: {}
+      security: []
+  /cloudphone/rpa/subTask/page:
+    post:
+      summary: Page query task executions record
+      deprecated: false
+      description: Query Schedules market template, template name supports fuzzy query
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId:
+                  type: integer
+                  description: Task id
+                  nullable: true
+                taskName:
+                  type: string
+                  description: Task name
+                  maxLength: 255
+                  minLength: 1
+                  nullable: true
+                taskState:
+                  type: integer
+                  description: >-
+                    Plan status; 0:awaiting execution; 1:Executing; 2:Execution
+                    completed 3:Cancel
+                  maximum: 9
+                  minimum: 0
+                  nullable: true
+                templateId:
+                  type: integer
+                  description: Template id
+                  maximum: 99999999999
+                  minimum: 0
+                  nullable: true
+                templateTitle:
+                  type: string
+                  description: Template title
+                  maxLength: 255
+                  minLength: 0
+                  nullable: true
+                cloudPhoneId:
+                  type: integer
+                  description: cloud phone id
+                  nullable: true
+                  example: 1559133625483282
+                cloudPhoneName:
+                  type: string
+                  description: Cloud phone name
+                  maxLength: 100
+                  minLength: 0
+                  nullable: true
+                beginTime:
+                  type: string
+                  description: Task start time UTC+0 time zone
+                  nullable: true
+                  example: 2025-01-01 23:59:59
+                endTime:
+                  type: string
+                  description: |
+                    Task end time UTC+0 time zone
+                  nullable: true
+                  example: 2025-01-02 23:59:59
+                pageNo:
+                  type: integer
+                  description: Default:1
+                  nullable: true
+                  example: 1
+                pageSize:
+                  type: integer
+                  description: Default:10
+                  nullable: true
+            example:
+              pageNo: 1
+              pageSize: 10
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: object
+                    properties:
+                      dataList:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Execution DTO'
+                      current:
+                        type: integer
+                        description: Current page number
+                      pages:
+                        type: integer
+                        description: Total pages
+                      total:
+                        type: integer
+                        description: Total count
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ''
+                data:
+                  current: 0
+                  dataList:
+                    - appIconUrls: []
+                      author: ''
+                      description: ''
+                      id: 0
+                      sort: 0
+                      title: ''
+                      type: 0
+                      updateDate: ''
+                  pages: 0
+                  total: 0
+          headers: {}
+      security: []
+  /cloudphone/rpa/subTask/detail/{id}:
+    post:
+      summary: Get a task execution
+      deprecated: false
+      description: Query Schedules market template, template name supports fuzzy query
+      tags:
+        - Cloud Phone/Schedules management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: Execution task id
+          required: true
+          example: 1678919049331331
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId:
+                  type: integer
+                  description: Task id
+                  nullable: true
+                taskName:
+                  type: string
+                  description: Task name
+                  maxLength: 255
+                  minLength: 1
+                  nullable: true
+                taskState:
+                  type: integer
+                  description: >-
+                    Plan status; 0:awaiting execution; 1:Executing; 2:Execution
+                    completed 3:Cancel
+                  maximum: 9
+                  minimum: 0
+                  nullable: true
+                templateId:
+                  type: integer
+                  description: Template id
+                  maximum: 99999999999
+                  minimum: 0
+                  nullable: true
+                templateTitle:
+                  type: string
+                  description: Template title
+                  maxLength: 255
+                  minLength: 0
+                  nullable: true
+                cloudPhoneId:
+                  type: integer
+                  description: cloud phone id
+                  nullable: true
+                  example: 1559133625483282
+                cloudPhoneName:
+                  type: string
+                  description: Cloud phone name
+                  maxLength: 100
+                  minLength: 0
+                  nullable: true
+                beginTime:
+                  type: string
+                  description: Task start time UTC+0 time zone
+                  nullable: true
+                  example: 2025-01-01 23:59:59
+                endTime:
+                  type: string
+                  description: |
+                    Task end time UTC+0 time zone
+                  nullable: true
+                  example: 2025-01-02 23:59:59
+                pageNo:
+                  type: integer
+                  description: Default:1
+                  nullable: true
+                  example: 1
+                pageSize:
+                  type: integer
+                  description: Default:10
+                  nullable: true
+            example: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: Execution record id
+                      taskName:
+                        type: string
+                        description: Schedule Task name
+                      taskState:
+                        type: integer
+                        description: >-
+                          Schedule status; 0:awaiting execution; 1:Executing;
+                          2:Execution completed 3:Cancel
+                      cloudPhoneId:
+                        type: integer
+                        description: Cloud phone ID
+                      cloudPhoneName:
+                        type: string
+                        description: Cloud phone name
+                      templateName:
+                        type: string
+                        description: Template title
+                      handleFailCode:
+                        type: string
+                        description: Task failure code
+                      handleFailReason:
+                        type: string
+                        description: Task failure reason
+                      handleResult:
+                        type: integer
+                        description: Task result. 0:failed; 1:succeeded
+                      handleResultAttachment:
+                        type: string
+                        description: Task execution result attachment
+                      handleTime:
+                        type: string
+                        description: Execution time
+                      endTime:
+                        type: string
+                        description: Task end time
+                      powerOnTime:
+                        type: string
+                        description: Cloud phone power-on time
+                      triggerNextTime:
+                        type: string
+                        description: Next scheduled trigger time
+                      triggerTime:
+                        type: string
+                        description: Scheduled trigger time
+                      createDate:
+                        type: string
+                        description: Creation time
+                      createMember:
+                        type: string
+                        description: Creator
+                      updateDate:
+                        type: string
+                        description: Last update time
+                      updateMember:
+                        type: string
+                        description: Last updater
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ''
+                data:
+                  current: 0
+                  dataList:
+                    - appIconUrls: []
+                      author: ''
+                      description: ''
+                      id: 0
+                      sort: 0
+                      title: ''
+                      type: 0
+                      updateDate: ''
+                  pages: 0
+                  total: 0
+          headers: {}
+      security: []
+  /cloudphone/rpa/subTask/cancel/{id}:
+    post:
+      summary: Cancel execution
+      deprecated: false
+      description: ''
+      tags:
+        - Cloud Phone/Schedules management
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Plan id
+              required:
+                - id
+            example:
+              id: 1678919049331329
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Response code, 0 indicates success,>0 indicates failure
+                  msg:
+                    type: string
+                    description: Error msg
+                  requestId:
+                    type: string
+                    description: Request trace id
+                required:
+                  - code
+                  - data
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                data: null
+                msg: ''
+          headers: {}
+      security: []
+  /proxyInfo/page:
+    post:
+      summary: Getting a list of proxies
+      deprecated: false
+      description: ""
+      operationId: queryProxyInfoPageUsingPOST
+      tags:
+        - Proxy Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pageNo:
+                  type: integer
+                  description: Current page number (starts from 1)
+                  example: 1
+                pageSize:
+                  type: integer
+                  description: Number of items per page
+                  example: 10
+                isCloudPhoneProxy:
+                  type: boolean
+                  description: |
+                    Whether the proxy is for cloud phone usage.
+                    - `true`: Exclude local/private IPs (e.g., 127.0.0.1, 360, pia, private ranges)
+                    - `false`: Return all proxies
+                  example: false
+                proxyCategoryType:
+                  type: integer
+                  description: |
+                    Proxy category type:
+                    - `1` = Cloud platform
+                    - `2` = Self-owned IP
+                  example: 2
+                proxyIp:
+                  type: string
+                  description: Filter by proxy IP address (partial match)
+                  example: ""
+                proxyName:
+                  type: string
+                  description: Filter by proxy name (partial match)
+                  example: ""
+                proxyProviders:
+                  type: array
+                  items:
+                    type: integer
+                  description: |
+                    List of proxy provider IDs. Supported values:
+                    - `0` = None
+                    - `4` = Oxylabs
+                    - `5` = Proxys.io
+                    - `6` = GeoSurf
+                    - `7` = Luminati
+                    - `8` = Lumauto
+                    - `9` = Oxylabsauto
+                    - `10` = Trojan
+                    - `11` = Shadowsocks
+                    - `12` = vmess
+                    - `13` = ABCPROXY
+                    - `14` = LunaProxy
+                    - `15` = IPHTML
+                    - `16` = PiaProxy
+                    - `17` = 922S5
+                  example: []
+                proxyStatus:
+                  type: integer
+                  description: |
+                    Proxy assignment status:
+                    - `0` = Normal
+                    - `1` = Unassigned
+                    - `2` = Upgrading
+                    - `3` = Expired
+                    - `4` = Expiring soon  
+                    > Note: Self-owned proxies always use status `1`.
+                  example: 1
+                proxyCheckStatus:
+                  type: integer
+                  description: |
+                    Proxy health check status:
+                    - `0` = Pending
+                    - `1` = Success
+                    - `2` = Failed
+                    - `3` = Unknown error
+                  example: 1
+                proxyTypes:
+                  type: array
+                  items:
+                    type: integer
+                  description: |
+                    Proxy protocol types:
+                    - `0` = HTTP
+                    - `1` = HTTPS
+                    - `2` = SOCKS5
+                    - `3` = SSH
+                  example: []
+              required: []
+            example:
+              pageNo: 1
+              pageSize: 10
+              isCloudPhoneProxy: false
+              proxyCategoryType: 2
+              proxyIp: ""
+              proxyName: ""
+              proxyProviders: []
+              proxyStatus: 1
+              proxyCheckStatus: 1
+              proxyTypes: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      current:
+                        type: integer
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            expiryTime:
+                              description: Expiration time
+                              type: integer
+                            id:
+                              description: Primary key
+                              type: integer
+                            proxyCategoryType:
+                              description: Proxy type 1:Platform proxy; 2:Self-owned proxy
+                              type: integer
+                            proxyCheckStatus:
+                              description: Detection status 0-pending detection 1-monitoring success 2-detection failure 3-unknown error
+                              type: integer
+                            proxyIp:
+                              description: Proxy IP
+                              type: string
+                            exportIp:
+                              description: export IP
+                              type: string
+                            countryCode:
+                              description: countryCode
+                              type: string
+                            proxyName:
+                              description: Proxy Name
+                              type: string
+                            proxyProvider:
+                              description: |
+                                Proxy Provider:default value 0 - none 4-Oxylabs 5-Proxys.io 7-Luminati 8-Lumauto 9-Oxylabsauto 10-Trojan，11-Shadowsocks 13-ABCPROXY 14-LunaProxy 15-IPHTML 16-PiaProxy 17-922S5
+                              type: integer
+                            proxyType:
+                              description: Proxy Type:0-http 1-https 2-socks5 3-ssh
+                              type: integer
+                            username:
+                              description: Proxy username
+                              type: string
+                            password:
+                              description: Proxy password
+                              type: string
+                            refreshUrl:
+                              description: Proxy refresh URL
+                              type: string
+                      pages:
+                        type: integer
+                      total:
+                        type: integer
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+          headers: {}
+      security: []
+
+  /proxyInfo/add:
+    post:
+      summary: Adding proxy
+      deprecated: false
+      description: ""
+      operationId: addUsingPOST
+      tags:
+        - Proxy Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                city:
+                  type: string
+                  description: City
+                  example: ""
+                country:
+                  type: string
+                  description: |
+                    Country code (ISO 3166-1 alpha-2). Required only if proxyProvider=17.
+                  example: "AD"
+                encryptionType:
+                  type: integer
+                  format: int32
+                  description: Encryption type, valid values are integers from 1 to 14.
+                  example: 14
+                ipChangeAction:
+                  type: integer
+                  format: int32
+                  description: Action on IP change:0 = Block, 1 = Warn
+                  example: 1
+                ipMonitor:
+                  type: boolean
+                  description: Enable IP change monitoring
+                  example: false
+                password:
+                  type: string
+                  description: Password for proxy authentication
+                  example: ""
+                proxyIp:
+                  type: string
+                  description: Proxy IP address
+                  example: "8.10.22.46"
+                proxyName:
+                  type: string
+                  description: Proxy name (supports placeholders like {{random}})
+                  example: "sock5_{{random}}"
+                proxyPort:
+                  type: integer
+                  format: int32
+                  description: Proxy port number
+                  example: 65534
+                proxyProvider:
+                  type: integer
+                  format: int32
+                  description: |
+                    Proxy provider type:
+                    0=HTTP, 1=HTTPS, 2=SOCKS5, 3=SSH, 4=Oxylabs, ..., 17=922S5.
+                    Special rules:
+                    - If proxyProvider is 7 or 8, proxyType is required.
+                    - If proxyProvider is 17, country is required; state and city are optional.
+                  example: 2
+                proxyType:
+                  type: integer
+                  format: int32
+                  description: |
+                    Proxy protocol type: 0=HTTP, 1=HTTPS, 2=SOCKS5, 3=SSH.
+                    Required only when proxyProvider is 7 or 8.
+                  example: 1
+                refreshUrl:
+                  type: string
+                  description: URL to refresh dynamic proxy IP (if supported)
+                  example: ""
+                state:
+                  type: string
+                  description: State/Province
+                  example: ""
+                username:
+                  type: string
+                  description: Username for proxy authentication
+                  example: ""
+              required:
+                - proxyIp
+                - proxyPort
+                - proxyProvider
+            example:
+              proxyIp: "8.10.22.46"
+              proxyPort: 65534
+              proxyProvider: 2
+              proxyType: 1
+              country: "AD"
+              state: ""
+              city: ""
+              encryptionType: 14
+              ipChangeAction: 1
+              ipMonitor: false
+              proxyName: "sock5_{{random}}"
+              refreshUrl: ""
+              username: ""
+              password: ""
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    description: Proxy ID
+                    type: integer
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: 0
+                requestId: "abcd1234"
+          headers: {}
+      security: []
+
+  /proxyInfo/update:
+    post:
+      summary: Modifying proxy information
+      deprecated: false
+      description: ""
+      operationId: updateProxyUsingPOST
+      tags:
+        - Proxy Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - proxyIp
+                - proxyPort
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: Unique proxy ID
+                proxyIp:
+                  type: string
+                  description: Proxy server IP address
+                proxyPort:
+                  type: integer
+                  description: Proxy server port
+                proxyName:
+                  type: string
+                  description: Custom name for the proxy
+                country:
+                  type: string
+                  description: Country (e.g., "US", "CN")
+                city:
+                  type: string
+                  description: City name
+                username:
+                  type: string
+                  description: Authentication username (if required)
+                password:
+                  type: string
+                  description: Authentication password (if required)
+                proxyType:
+                  type: integer
+                  description: |
+                    Proxy protocol type:
+                    - `0` = HTTP
+                    - `1` = HTTPS
+                    - `2` = SOCKS5
+                    - `3` = SSH
+                proxyProvider:
+                  type: integer
+                  description: |
+                    Proxy provider ID:
+                    - `0` = None / Self-owned
+                    - `4` = Oxylabs
+                    - `5` = Proxys.io
+                    - `6` = GeoSurf
+                    - `7` = Luminati
+                    - `8` = Lumauto
+                    - `9` = Oxylabsauto
+                    - `10` = Trojan
+                    - `11` = Shadowsocks
+                    - `12` = vmess
+                    - `13` = ABCPROXY
+                    - `14` = LunaProxy
+                    - `15` = IPHTML
+                    - `16` = PiaProxy
+                    - `17` = 922S5
+                encryptionType:
+                  type: integer
+                  description: Encryption type (provider-specific, usually 0 for plain)
+                ipMonitor:
+                  type: boolean
+                  description: Enable IP change monitoring
+                ipChangeAction:
+                  type: integer
+                  description: |
+                    Action to take when IP changes:
+                    - `1` = Notify / Refresh (common value)
+                    > Check system documentation for full options.
+                refreshUrl:
+                  type: string
+                  description: URL to trigger IP refresh (if supported by provider)
+                state:
+                  type: string
+                  description: Reserved field or custom state (optional)
+            example:
+              id: 1566403036579198
+              proxyIp: "108.11.23.85"
+              proxyPort: 4096
+              proxyName: "MyProxy"
+              country: "US"
+              city: "New York"
+              username: ""
+              password: ""
+              proxyType: 0
+              proxyProvider: 0
+              encryptionType: 0
+              ipMonitor: true
+              ipChangeAction: 1
+              refreshUrl: ""
+              state: ""
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                requestId: "efgh5678"
+          headers: {}
+      security: []
+
+  /proxyInfo/delete:
+    post:
+      summary: Delete proxy
+      deprecated: false
+      description: ""
+      operationId: deleteProxyUsingPOST
+      tags:
+        - Proxy Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+            example:
+              - 1054661322597744600
+              - 1054661322597744601
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                requestId: "ijkl9012"
+          headers: {}
+      security: []
+  /envgroup/page:
+    post:
+      summary: Get a list of groups
+      deprecated: false
+      description: ""
+      tags:
+        - Group Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupName:
+                  type: string
+                  title: Group name (partial match)
+                pageNo:
+                  type: integer
+                  title: Current page
+                pageSize:
+                  type: integer
+                  title: Items per page
+              required:
+                - groupName
+                - pageNo
+                - pageSize
+            example:
+              groupName: 132-kernel
+              pageNo: 1
+              pageSize: 10
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      current:
+                        type: integer
+                      dataList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              description: Group ID
+                              type: integer
+                            groupName:
+                              description: Group name
+                              type: string
+                      pages:
+                        type: integer
+                      total:
+                        type: integer
+                    required:
+                      - current
+                      - dataList
+                      - pages
+                      - total
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data:
+                  current: 0
+                  dataList:
+                    - id: 0
+                      groupName: ""
+                  pages: 0
+                  total: 0
+                requestId: ""
+          headers: {}
+      security: []
+  /envgroup/edit:
+    post:
+      summary: Modify grouping information
+      deprecated: false
+      description: ""
+      tags:
+        - Group Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - groupName
+                - id
+              properties:
+                groupName:
+                  type: string
+                  description: New name for the environment group
+                id:
+                  type: integer
+                  format: int64
+                  description: Unique ID of the group to be updated
+            example:
+              groupName: "Group-1574544945848579"
+              id: 1574525425557584
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: boolean
+                    description: result
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: 0
+                requestId: ""
+          headers: {}
+      security: []
+  /envgroup/create:
+    post:
+      summary: Add group
+      deprecated: false
+      description: ""
+      tags:
+        - Group Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              groupName: Group-333
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    description: The data returned by the operation
+                    type: integer
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: 0
+                requestId: ""
+          headers: {}
+      security: []
+  /envgroup/delete:
+    post:
+      summary: Delete group
+      deprecated: false
+      description: ""
+      tags:
+        - Group Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              ids:
+                - 1588991461723549
+              isDeleteAllEnv: false
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: boolean
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: true
+                requestId: ""
+          headers: {}
+      security: []
+  /envtag/all:
+    get:
+      summary: Getting a list of tags
+      deprecated: false
+      description: ""
+      tags:
+        - Tag Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: error message
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          description: ID of tags
+                          type: integer
+                        tagName:
+                          description: Name of tags
+                          type: string
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data:
+                  - id: 0
+                    tagName: ""
+                requestId: ""
+          headers: {}
+      security: []
+  /envtag/create:
+    post:
+      summary: Create tags
+      deprecated: false
+      description: ""
+      tags:
+        - Tag Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              tagName: Tag-123
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: error message
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        description: ID of tags
+                        type: integer
+                      tagName:
+                        description: Name of tags
+                        type: string
+                    required:
+                      - id
+                      - tagName
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                  error:
+                    type: object
+                    properties: {}
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data:
+                  id: 0
+                  tagName: ""
+                requestId: ""
+          headers: {}
+      security: []
+  /envtag/edit:
+    post:
+      summary: Modify information of tags
+      deprecated: false
+      description: ""
+      tags:
+        - Tag Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              id: 1564715845550177
+              tagName: Updated-123
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: boolean
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                  error:
+                    type: object
+                    properties: {}
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: true
+                requestId: ""
+          headers: {}
+      security: []
+  /envtag/delete:
+    post:
+      summary: Delete tags
+      deprecated: false
+      description: ""
+      tags:
+        - Tag Management
+      parameters: 
+        - name: Authorization
+          in: header
+          description: Token for request access token interface response access_token field
+          required: true
+          example: {{Authorization}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              ids:
+                - "1574175499182143"
+                - "1574175188803646"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: Return result code 0:Normal Other codes are exceptions.
+                    type: integer
+                  msg:
+                    description: Error message
+                    type: string
+                  data:
+                    type: boolean
+                  requestId:
+                    description: Operation Request ID
+                    type: string
+                required:
+                  - code
+                  - msg
+                  - data
+                  - requestId
+              example:
+                code: 0
+                msg: ""
+                data: true
+                requestId: ""
+          headers: {}
+      security: []
+webhooks: {}
+components:
+  schemas:
+    CloudPhoneProfile:
+      type: object
+      properties:
+        abnormalStatus:
+          type: integer
+          description: Abnormal status 0-No abnormality 1-Unactivated 2-Out-of-contract 3-Oversold 4-Deactivated
+        adbInfo:
+          $ref: '#/components/schemas/AdbInfo'
+        billingType:
+          type: integer
+          description: Billing:0-Free 1-Flexible subscription 2-Monthly
+        createDate:
+          type: string
+          format: date-time
+        createMember:
+          type: integer
+        createMemberName:
+          type: string
+        enableAdb:
+          type: boolean
+        envName:
+          type: string
+          description: Cloud Phone Name
+        envRemark:
+          type: string
+          description: Profile Remarks
+        envStatus:
+          type: integer
+          description: Profile Status:0-New 1-Creation Failed 2-Stop 3-Starting up 4-Start 5-Reset In Progress
+        expireTime:
+          type: integer
+          description: expiration time
+        groupId:
+          type: integer
+        groupInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagInfo'
+        id:
+          type: integer
+          format: int64
+        lastConnectDate:
+          type: string
+          format: date-time
+        lastConnectMemberId:
+          type: integer
+        lastConnectMemberName:
+          type: string
+        lastStartDate:
+          type: string
+          format: date-time
+        lastStartMemberId:
+          type: integer
+        lastStartMemberName:
+          type: string
+        proxy:
+          $ref: '#/components/schemas/ProxyInfo'
+        proxyStatus:
+          type: integer
+          description: Proxy Status:0-Not Detected 1-Detecting 2-Detecting Failed 3-Detecting Successful
+        supportAdb:
+          type: boolean
+        tagIds:
+          type: array
+          items:
+            type: string
+        tagInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagInfo'
+        updateDate:
+          type: string
+          format: date-time
+        updateMember:
+          type: integer
+
+    AdbInfo:
+      type: object
+      properties:
+        adbIp:
+          type: string
+          description: adb ip
+        adbPassword:
+          type: string
+          description: adb connection password
+        adbPort:
+          type: string
+          description: adb port
+        remark:
+          type: string
+          description: Failure Remarks Information
+        success:
+          type: integer
+          description: Successful acquisition 1=Yes 0=No
+      required:
+        - adbIp
+        - adbPassword
+        - adbPort
+        - remark
+        - success
+
+    ProxyInfo:
+      type: object
+      properties:
+        country:
+          type: string
+        countryCode:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        delFlag:
+          type: integer
+          description: 1 - deleted 2 - not deleted
+        expiryTime:
+          type: integer
+        exportIp:
+          type: string
+        groupId:
+          type: integer
+        id:
+          type: integer
+          format: int64
+        providerCode:
+          type: string
+        proxyAreaCode:
+          type: string
+        proxyCatagoryType:
+          type: integer
+          description: Proxy type:0:site group 1:cloud platform 2:own IP 3:vps 4:virtual machine
+        proxyCheckStatus:
+          type: integer
+          description: Detection status:0:pending detection 1:successful detection 2:detection failure 3:unknown error
+        proxyInfo:
+          type: string
+        proxyIp:
+          type: string
+        proxyName:
+          type: string
+        proxyPort:
+          type: integer
+        proxyRegionCode:
+          type: string
+        proxyStatus:
+          type: integer
+          description: 0-Normal 1-Pending allocation 2-Upgrading 3-Expired
+        proxySub:
+          $ref: '#/components/schemas/ProxySubscription'
+        proxyType:
+          type: integer
+          description: Proxy type:0-http 1-https 2-socks5 4-Oxylabs 5-Proxys.io 6-GeoSurf 9-Oxylabsauto 10-Trogan 11-Shadowsocks 12-vmess
+        proxyTypeCode:
+          type: string
+        regionKey:
+          type: string
+        releaseTime:
+          type: string
+          format: date-time
+          description: Release time:deletion time if deleted, expiration time if expired
+        uniqueId:
+          type: integer
+      required:
+        - country
+        - countryCode
+        - createDate
+        - delFlag
+        - expiryTime
+        - exportIp
+        - groupId
+        - id
+        - providerCode
+        - proxyAreaCode
+        - proxyCatagoryType
+        - proxyCheckStatus
+        - proxyInfo
+        - proxyIp
+        - proxyName
+        - proxyPort
+        - proxyRegionCode
+        - proxyStatus
+        - proxySub
+        - proxyType
+        - proxyTypeCode
+        - regionKey
+        - releaseTime
+        - uniqueId
+
+    ProxySubscription:
+      type: object
+      properties:
+        activeRecordId:
+          type: integer
+        businessId:
+          type: string
+        createMember:
+          type: integer
+        endTime:
+          type: integer
+        id:
+          type: integer
+        nextBillingTime:
+          type: integer
+        startTime:
+          type: integer
+        subPayMethod:
+          type: string
+        subStatus:
+          type: integer
+          description: Subscription Status:0-Pending 1-Subscribed 2-Cancelled
+        subType:
+          type: integer
+          description: Subscription Type:1-Agent 2-Package
+        teamId:
+          type: integer
+      required:
+        - activeRecordId
+        - businessId
+        - createMember
+        - endTime
+        - id
+        - nextBillingTime
+        - startTime
+        - subPayMethod
+        - subStatus
+        - subType
+        - teamId
+
+    TagInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        tagIcon:
+          type: string
+        tagName:
+          type: string
+        tagSource:
+          type: string
+          description: 'Tag Source: ENV profile, PROXY proxy'
+        tagType:
+          type: string
+          description: 'Tag type: TAG tag, GROUP group'
+
+    CloudPhoneDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        envName:
+          type: string
+        groupId:
+          type: string
+        skuId:
+          type: string
+        tagIds:
+          type: array
+          items:
+            type: string
+        billingType:
+          type: integer
+        proxyStatus:
+          type: integer
+        settings:
+          type: object
+          properties:
+            automaticGeo:
+              type: boolean
+            automaticLocation:
+              type: boolean
+            automaticLanguage:
+              type: boolean
+            longitude:
+              type: number
+              nullable: true
+            latitude:
+              type: number
+              nullable: true
+          required:
+            - automaticGeo
+            - automaticLocation
+            - automaticLanguage
+            - longitude
+            - latitude
+        device:
+          type: object
+          properties:
+            server:
+              type: string
+              nullable: true
+            countryName:
+              type: string
+            rom:
+              type: integer
+            wifiBssid:
+              type: string
+              nullable: true
+            bluetoothMac:
+              type: string
+          required:
+            - server
+            - countryName
+            - rom
+            - wifiBssid
+            - bluetoothMac
+        proxy:
+          type: object
+          properties:
+            id:
+              type: string
+            proxyName:
+              type: string
+            proxyIp:
+              type: string
+          required:
+            - id
+            - proxyName
+            - proxyIp
+        lastStartMemberId:
+          type: string
+        lastStartMemberName:
+          type: string
+          nullable: true
+        lastStartDate:
+          type: string
+          format: date-time
+        lastConnectMemberId:
+          type: string
+        lastConnectMemberName:
+          type: string
+          nullable: true
+        lastConnectDate:
+          type: string
+          format: date-time
+        envStatus:
+          type: integer
+        abnormalStatus:
+          type: integer
+        expireTime:
+          type: string
+        envRemark:
+          type: string
+        createMember:
+          type: string
+        updateMember:
+          type: string
+        updateDate:
+          type: string
+          format: date-time
+        createDate:
+          type: string
+          format: date-time
+        createMemberName:
+          type: string
+          nullable: true
+      required:
+        - id
+        - envName
+        - groupId
+        - skuId
+        - tagIds
+        - billingType
+        - proxyStatus
+        - settings
+        - device
+        - proxy
+        - lastStartMemberId
+        - lastStartMemberName
+        - lastStartDate
+        - lastConnectMemberId
+        - lastConnectMemberName
+        - lastConnectDate
+        - envStatus
+        - abnormalStatus
+        - expireTime
+        - envRemark
+        - createMember
+        - updateMember
+        - updateDate
+        - createDate
+        - createMemberName
+
+    Execution DTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution record id
+        taskName:
+          type: string
+          description: Schedule Task name
+        taskState:
+          type: integer
+          description: >-
+            Schedule status; 0:awaiting execution; 1:Executing; 2:Execution
+            completed 3:Cancel
+        cloudPhoneId:
+          type: integer
+          description: Cloud phone ID
+        cloudPhoneName:
+          type: string
+          description: Cloud phone name
+        templateName:
+          type: string
+          description: Template title
+        handleFailCode:
+          type: string
+          description: Task failure code
+        handleFailReason:
+          type: string
+          description: Task failure reason
+        handleResult:
+          type: integer
+          description: Task result. 0:failed; 1:succeeded
+        handleResultAttachment:
+          type: string
+          description: Task execution result attachment
+        handleTime:
+          type: string
+          description: Execution time
+        endTime:
+          type: string
+          description: Task end time
+        powerOnTime:
+          type: string
+          description: Cloud phone power-on time
+        triggerNextTime:
+          type: string
+          description: Next scheduled trigger time
+        triggerTime:
+          type: string
+          description: Scheduled trigger time
+        createDate:
+          type: string
+          description: ' Creation time'
+        createMember:
+          type: string
+          description: Creator
+        updateDate:
+          type: string
+          description: Last update time
+        updateMember:
+          type: string
+          description: Last updater
+  responses:
+    404:
+      description: ""
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+            required:
+              - code
+              - message
+    402:
+      description: ""
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+            required:
+              - code
+              - message
+  securitySchemes: {}
+servers:
+  - url: https://api.morelogin.com
+    description: Morelogin open api endponint
+security: []
