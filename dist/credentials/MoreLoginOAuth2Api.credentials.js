@@ -6,6 +6,7 @@ class moreLoginOAuth2Api {
         this.name = 'moreLoginOAuth2Api';
         this.displayName = 'MoreLogin OAuth2 API';
         this.extends = ['oAuth2Api'];
+        this.icon = { light: 'file:../icons/morelogin.svg', dark: 'file:../icons/morelogin.dark.svg' };
         this.documentationUrl = 'https://guide.morelogin.com/api-reference/open-api/open-api/authorization';
         this.properties = [
             {
