@@ -121,8 +121,6 @@ export class Morelogin implements INodeType {
         const items = this.getInputData();
         const returnData: INodeExecutionData[] = [];
 
-        console.log('request items:', items);
-
         for (let i = 0; i < items.length; i++) {
 
             const body: Record<string, unknown> = {}; 
@@ -133,9 +131,6 @@ export class Morelogin implements INodeType {
                 
                 const resource = this.getNodeParameter('resource', i) as string;
                 const operation = this.getNodeParameter('operation', i) as string;
-                
-                const allParams = this.getNodeParameter('', i, {}) as Record<string, unknown>;
-                console.log('request allParams:', allParams);
 
                 const relevantParams = allScheduleParams.filter(param => {
                     const show = param.displayOptions?.show;
@@ -154,7 +149,7 @@ export class Morelogin implements INodeType {
 
                     let value = this.getNodeParameter(param.name, i);
                     if (value == null) continue;
-                    
+
                     if (param.name === 'sort') {
                         const sort = value as { sortItem?: Array<{ sortDirection: string; sortField: string }> };
                         if (sort.sortItem) {
@@ -177,7 +172,9 @@ export class Morelogin implements INodeType {
                         method = 'GET';
                         endpoint = '/oauth2/userinfo';
                     } else {
-                        throw new Error(`Unsupported account operation: ${operation}`);
+                        throw new NodeApiError(this.getNode(), {}, {
+                            message: `Unsupported account operation: ${operation}`,
+                        });
                     }
                 } else if (resource === 'schedule') {
                     // mapping endpoint
@@ -195,10 +192,14 @@ export class Morelogin implements INodeType {
 
                     endpoint = opMap[operation];
                     if (!endpoint) {
-                        throw new Error(`Unsupported cloudphone operation: ${operation}`);
+                        throw new NodeApiError(this.getNode(), {}, {
+                            message: `Unsupported schedule operation: ${operation}`,
+                        });
                     }
                 } else {
-                    throw new Error(`Unsupported resource: ${resource}`);
+                    throw new NodeApiError(this.getNode(), {}, {
+                            message: `Unsupported resource: ${resource}`,
+                        });
                 }
                 
                 const response = await this.helpers.httpRequest({
@@ -221,12 +222,8 @@ export class Morelogin implements INodeType {
                 returnData.push({ json: response.data || response });
 
             } catch (error) {
-                
-                console.log('Parameter collection warning:', error.message);
-                // if (error instanceof NodeApiError) throw error;
-                // throw new NodeApiError(this.getNode(), error as JsonObject);
                 throw new NodeApiError(this.getNode(), {}, { 
-                    message: `Info: ${endpoint} ${body}`, 
+                    message: `Info: ${endpoint} ${error.message}`, 
                     description: JSON.stringify(body) 
                 });
             }

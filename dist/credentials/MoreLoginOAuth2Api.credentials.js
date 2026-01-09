@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MoreLoginOAuth2Api = void 0;
-class MoreLoginOAuth2Api {
+exports.moreLoginOAuth2Api = void 0;
+class moreLoginOAuth2Api {
     constructor() {
         this.name = 'moreLoginOAuth2Api';
         this.displayName = 'MoreLogin OAuth2 API';
@@ -15,14 +15,14 @@ class MoreLoginOAuth2Api {
                 default: 'clientCredentials',
             },
             {
-                displayName: 'Client ID',
+                displayName: 'API ID',
                 name: 'clientId',
                 type: 'string',
                 default: '',
                 required: true,
             },
             {
-                displayName: 'Client Secret',
+                displayName: 'API Key',
                 name: 'clientSecret',
                 type: 'string',
                 typeOptions: { password: true },
@@ -38,5 +38,5 @@ class MoreLoginOAuth2Api {
         ];
     }
 }
-exports.MoreLoginOAuth2Api = MoreLoginOAuth2Api;
-//# sourceMappingURL=MoreLoginOAuth2Api.credentials.js.map
+exports.moreLoginOAuth2Api = moreLoginOAuth2Api;
+//# sourceMappingURL=moreLoginOAuth2Api.credentials.js.map

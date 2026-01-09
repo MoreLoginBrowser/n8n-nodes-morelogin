@@ -100,7 +100,6 @@ class Morelogin {
         }
         const items = this.getInputData();
         const returnData = [];
-        console.log('request items:', items);
         for (let i = 0; i < items.length; i++) {
             const body = {};
             let endpoint = '';
@@ -108,8 +107,6 @@ class Morelogin {
                 let method = 'POST';
                 const resource = this.getNodeParameter('resource', i);
                 const operation = this.getNodeParameter('operation', i);
-                const allParams = this.getNodeParameter('', i, {});
-                console.log('request allParams:', allParams);
                 const relevantParams = allScheduleParams.filter(param => {
                     var _a;
                     const show = (_a = param.displayOptions) === null || _a === void 0 ? void 0 : _a.show;
@@ -148,7 +145,9 @@ class Morelogin {
                         endpoint = '/oauth2/userinfo';
                     }
                     else {
-                        throw new Error(`Unsupported account operation: ${operation}`);
+                        throw new n8n_workflow_1.NodeApiError(this.getNode(), {}, {
+                            message: `Unsupported account operation: ${operation}`,
+                        });
                     }
                 }
                 else if (resource === 'schedule') {
@@ -160,11 +159,15 @@ class Morelogin {
                     };
                     endpoint = opMap[operation];
                     if (!endpoint) {
-                        throw new Error(`Unsupported cloudphone operation: ${operation}`);
+                        throw new n8n_workflow_1.NodeApiError(this.getNode(), {}, {
+                            message: `Unsupported schedule operation: ${operation}`,
+                        });
                     }
                 }
                 else {
-                    throw new Error(`Unsupported resource: ${resource}`);
+                    throw new n8n_workflow_1.NodeApiError(this.getNode(), {}, {
+                        message: `Unsupported resource: ${resource}`,
+                    });
                 }
                 const response = await this.helpers.httpRequest({
                     method,
@@ -184,9 +187,8 @@ class Morelogin {
                 returnData.push({ json: response.data || response });
             }
             catch (error) {
-                console.log('Parameter collection warning:', error.message);
                 throw new n8n_workflow_1.NodeApiError(this.getNode(), {}, {
-                    message: `Info: ${endpoint} ${body}`,
+                    message: `Info: ${endpoint} ${error.message}`,
                     description: JSON.stringify(body)
                 });
             }

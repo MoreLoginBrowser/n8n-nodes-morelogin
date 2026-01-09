@@ -20,7 +20,7 @@ exports.accountDescription = [
                 name: 'Get Token',
                 value: 'getToken',
                 action: 'Get an access token',
-                description: 'Exchange client id and secret for an access token',
+                description: 'Exchange client ID and secret for an access token',
                 routing: {
                     request: {
                         method: 'POST',

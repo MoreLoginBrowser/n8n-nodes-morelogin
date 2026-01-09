@@ -1,10 +1,14 @@
-import { ICredentialType, INodeProperties } from 'n8n-workflow';
+import { Icon, ICredentialType, INodeProperties } from 'n8n-workflow';
 
-export class MoreLoginOAuth2Api implements ICredentialType {
+export class moreLoginOAuth2Api implements ICredentialType {
 	name = 'moreLoginOAuth2Api';
+
 	displayName = 'MoreLogin OAuth2 API';
-	// 继承 n8n 的内置 OAuth2 逻辑，它会自动处理 expires_in 逻辑
+
 	extends = ['oAuth2Api'];
+
+	icon: Icon = { light: 'file:../icons/morelogin.svg', dark: 'file:../icons/morelogin.dark.svg' };
+	
 	documentationUrl = 'https://guide.morelogin.com/api-reference/open-api/open-api/authorization';
 
 	properties: INodeProperties[] = [
@@ -15,14 +19,14 @@ export class MoreLoginOAuth2Api implements ICredentialType {
             default: 'clientCredentials',
         },
 		{
-			displayName: 'Client ID',
+			displayName: 'API ID',
 			name: 'clientId',
 			type: 'string',
 			default: '',
 			required: true,
 		},
 		{
-			displayName: 'Client Secret',
+			displayName: 'API Key',
 			name: 'clientSecret',
 			type: 'string',
 			typeOptions: { password: true },

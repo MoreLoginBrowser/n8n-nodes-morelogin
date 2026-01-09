@@ -14,6 +14,6 @@ export const accountGetInfoDescription: INodeProperties[] = [
         displayOptions: {
             show: showOnlyForGetInfo,
         },
-        description: 'When true, uses node credential Authorization header',
+        description: 'Whether to use node credential Authorization header',
     },
 ];

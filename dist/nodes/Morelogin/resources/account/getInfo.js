@@ -14,7 +14,7 @@ exports.accountGetInfoDescription = [
         displayOptions: {
             show: showOnlyForGetInfo,
         },
-        description: 'When true, uses node credential Authorization header',
+        description: 'Whether to use node credential Authorization header',
     },
 ];
 //# sourceMappingURL=getInfo.js.map

@@ -43,7 +43,7 @@ exports.scheduleDescription = [
             {
                 name: 'Create a Schedule',
                 value: 'createSchedule',
-                action: 'Create a Schedule',
+                action: 'Create a schedule',
                 routing: {
                     request: {
                         method: 'POST',
@@ -54,7 +54,7 @@ exports.scheduleDescription = [
             {
                 name: 'Create a Once Schedule',
                 value: 'createOnceSchedule',
-                action: 'Create a Once Schedule',
+                action: 'Create a once schedule',
                 routing: {
                     request: {
                         method: 'POST',
