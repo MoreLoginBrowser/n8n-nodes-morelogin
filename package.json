@@ -1,13 +1,13 @@
 {
     "name": "n8n-nodes-morelogin",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Morelogin node for n8n",
     "license": "MIT",
     "homepage": "",
     "keywords": [
-        "n8n", 
-        "n8n-community-node-package", 
-        "n8n-community-node-package", 
+        "n8n",
+        "n8n-community-node-package",
+        "n8n-community-node-package",
         "morelogin"
     ],
     "author": {
