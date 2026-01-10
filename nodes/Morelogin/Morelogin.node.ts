@@ -201,8 +201,6 @@ export class Morelogin implements INodeType {
                             message: `Unsupported resource: ${resource}`,
                         });
                 }
-                
-                console.log('body', JSON.stringify(body));
 
                 if (operation === 'createSchedule') {
                     body = {
@@ -218,7 +216,7 @@ export class Morelogin implements INodeType {
                         cloudPhoneConfigs: this.getNodeParameter('cloudPhoneConfigs.configItem', i),
                     };
                 }
-                console.log('after body', JSON.stringify(body));
+                
                 const response = await this.helpers.httpRequest({
                     method,
                     url: `https://api.morelogin.com${endpoint}`,
@@ -229,8 +227,6 @@ export class Morelogin implements INodeType {
                     body: method === 'POST' && Object.keys(body).length > 0 ? body : undefined,
                     json: true,
                 });
-
-                console.log('response', JSON.stringify(response));
 
                 if (response.code !== 0) {
                     throw new NodeApiError(this.getNode(), response, {
