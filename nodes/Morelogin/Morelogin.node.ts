@@ -123,7 +123,7 @@ export class Morelogin implements INodeType {
 
         for (let i = 0; i < items.length; i++) {
 
-            const body: Record<string, unknown> = {}; 
+            let body: Record<string, unknown> = {};
             let endpoint = '';
             try {
                 
@@ -138,11 +138,11 @@ export class Morelogin implements INodeType {
 
                     const matchesResource = !show.resource || (Array.isArray(show.resource) ? show.resource.includes(resource) : show.resource === resource);
                     const matchesOperation = !show.operation || (Array.isArray(show.operation) ? show.operation.includes(operation) : show.operation === operation);
-
+                    
                     return matchesResource && matchesOperation;
                 });
 
-                const body: Record<string, unknown> = {};
+                body = {};
 
                 for (const param of relevantParams) {
                     if (!param.routing?.send || param.routing.send.type !== 'body') continue;
@@ -202,6 +202,23 @@ export class Morelogin implements INodeType {
                         });
                 }
                 
+                console.log('body', JSON.stringify(body));
+
+                if (operation === 'createSchedule') {
+                    body = {
+                        taskName: this.getNodeParameter('taskName', i),
+                        templateId: this.getNodeParameter('templateId', i),
+                        templateType: this.getNodeParameter('templateType', i),
+                        taskType: this.getNodeParameter('taskType', i),
+                        notes: this.getNodeParameter('notes', i),
+                        scheduleConfig: {
+                            endTime: this.getNodeParameter('scheduleConfig.schedule.endTime', i),
+                            ScheduleType: this.getNodeParameter('scheduleConfig.schedule.ScheduleType', i),
+                        },
+                        cloudPhoneConfigs: this.getNodeParameter('cloudPhoneConfigs.configItem', i),
+                    };
+                }
+                console.log('after body', JSON.stringify(body));
                 const response = await this.helpers.httpRequest({
                     method,
                     url: `https://api.morelogin.com${endpoint}`,
@@ -212,6 +229,8 @@ export class Morelogin implements INodeType {
                     body: method === 'POST' && Object.keys(body).length > 0 ? body : undefined,
                     json: true,
                 });
+
+                console.log('response', JSON.stringify(response));
 
                 if (response.code !== 0) {
                     throw new NodeApiError(this.getNode(), response, {

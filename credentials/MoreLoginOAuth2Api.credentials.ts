@@ -19,6 +19,13 @@ export class moreLoginOAuth2Api implements ICredentialType {
             default: 'clientCredentials',
         },
 		{
+			displayName: 'Access Token URL',
+			name: 'accessTokenUrl',
+			type: 'string',
+			default: 'https://api.morelogin.com/oauth2/token', // 按你服务的实际 token 地址填
+			required: true,
+		},
+		{
 			displayName: 'API ID',
 			name: 'clientId',
 			type: 'string',

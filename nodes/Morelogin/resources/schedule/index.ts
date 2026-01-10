@@ -5,7 +5,7 @@ import { searchPersonalTemplateForPageDescription } from './searchPersonalTempla
 import { createScheduleDescription } from './createSchedule';
 import { createOnceScheduleDescription } from './createOnceSchedule';
 
-const showOnlyForCloudphone = {
+const showOnlyForSchedule = {
     resource: ['schedule'],
 };
 
@@ -16,7 +16,7 @@ export const scheduleDescription: INodeProperties[] = [
         type: 'options',
         noDataExpression: true,
         displayOptions: {
-            show: showOnlyForCloudphone,
+            show: showOnlyForSchedule,
         },
         options: [
             {

@@ -47,11 +47,11 @@ export const createScheduleDescription: INodeProperties[] = [
         routing: { send: { type: 'body', property: 'taskType' } },
     },
     {
-        displayName: 'Notes',
+        displayName: 'Description',
         name: 'notes',
         type: 'string',
         default: '',
-        description: 'Plan notes',
+        description: 'Schedule description',
         displayOptions: { show: showOnlyForScheduleSave },
         routing: { send: { type: 'body', property: 'notes' } },
     },
@@ -65,23 +65,23 @@ export const createScheduleDescription: INodeProperties[] = [
         displayOptions: { show: showOnlyForScheduleSave },
         options: [
             {
-                displayName: 'Config Item',
-                name: 'configItem',
-                values: [
-                    { displayName: 'CloudPhoneId', name: 'cloudPhoneId', type: 'number', default: 0 },
-                    { displayName: 'Template Parameter', name: 'templateParameter', type: 'string', default: '' },
-                    { displayName: 'Trigger Time', name: 'triggerTime', type: 'string', default: '' },
-                ],
+            displayName: 'Config Item',
+            name: 'configItem',
+            values: [
+                { displayName: 'CloudPhoneId', name: 'cloudPhoneId', type: 'number', default: 0 },
+                { displayName: 'Template Parameter', name: 'templateParameter', type: 'string', default: '' },
+                { displayName: 'Trigger Time', name: 'triggerTime', type: 'dateTime', default: '', description: 'The time to trigger something' },
+            ],
             },
         ],
         routing: {
             send: {
-                type: 'body',
-                property: 'cloudPhoneConfigs',
-                value: '={{ $value.configItem.map(i => ({ cloudPhoneId: i.cloudPhoneId, templateParameter: i.templateParameter, triggerTime: i.triggerTime })) }}',
+            type: 'body',
+            property: 'cloudPhoneConfigs',
+            value: '={{ $value.configItem.map(i => ({ cloudPhoneId: i.cloudPhoneId, templateParameter: i.templateParameter, triggerTime: i.triggerTime })) }}',
             },
         },
-    },
+        },
     {
         displayName: 'Schedule Config',
         name: 'scheduleConfig',
@@ -95,8 +95,17 @@ export const createScheduleDescription: INodeProperties[] = [
                 displayName: 'Schedule',
                 name: 'schedule',
                 values: [
-                    { displayName: 'End Time', name: 'endTime', type: 'string', default: '' },
-                    { displayName: 'Schedule Type', name: 'scheduleType', type: 'string', default: '' },
+                    { displayName: 'End Time', name: 'endTime', type: 'dateTime', default: '', description: 'End time of the schedule' },
+                    {
+                        displayName: 'Schedule Type',
+                        name: 'ScheduleType',
+                        type: 'options',
+                        options: [
+                            { name: 'ONCE', value: 'ONCE' },
+                            { name: 'DAILY', value: 'DAILY' },
+                        ],
+                        default: 'ONCE',
+                    },
                 ],
             },
         ],
@@ -104,7 +113,7 @@ export const createScheduleDescription: INodeProperties[] = [
             send: {
                 type: 'body',
                 property: 'scheduleConfig',
-                value: '={{ $value.schedule }}',
+                value: '={{ { endTime: $value.schedule.endTime, ScheduleType: $value.schedule.ScheduleType } }}',
             },
         },
     },
