@@ -1,6 +1,6 @@
 {
     "name": "n8n-nodes-morelogin",
-    "version": "1.0.2",
+    "version": "1.0.1",
     "description": "Morelogin node for n8n",
     "license": "MIT",
     "homepage": "",
@@ -40,7 +40,7 @@
             "credentials/moreLoginOAuth2Api.credentials.ts"
         ],
         "nodes": [
-            "nodes/morelogin/morelogin.node.ts"
+            "nodes/morelogin/Morelogin.node.ts"
         ]
     },
     "devDependencies": {
