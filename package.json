@@ -21,6 +21,7 @@
     "main": "index.js",
     "scripts": {
         "build": "n8n-node build",
+        "postbuild": "cp index.js dist/index.js",
         "build:watch": "tsc --watch",
         "dev": "n8n-node dev",
         "lint": "n8n-node lint",
@@ -29,11 +30,7 @@
         "prepublishOnly": "n8n-node prerelease"
     },
     "files": [
-        "dist",
-        "nodes",
-        "credentials",
-        "icons",
-        "index.js"
+        "dist"
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
