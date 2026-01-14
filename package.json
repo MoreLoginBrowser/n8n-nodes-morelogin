@@ -1,34 +1,40 @@
 {
     "name": "n8n-nodes-morelogin",
     "version": "1.0.7",
-    "description": "Morelogin node for n8n",
+    "description": "n8n nodes for Morelogin",
     "license": "MIT",
     "homepage": "https://github.com/MoreLoginBrowser/n8n-nodes-morelogin",
     "keywords": [
         "n8n",
         "n8n-community-node-package",
         "n8n-community-node-package",
-        "MoreLogin-nodes"
+        "morelogin",
+        "MoreLogin",
+        "MoreLogin-node",
+        "morelogin-node",
+        "MoreLogin-nodes",
+        "morelogin-nodes"
     ],
     "author": {
-        "name": "MoreLogin",
+        "name": "MoreLogin Team",
         "email": "developer@morelogin.com"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/MoreLoginBrowser/n8n-nodes-morelogin.git"
     },
+    "engines": {
+		"node": ">=20.15"
+	},
     "main": "index.js",
     "scripts": {
-        "build": "n8n-node build",
-        "postbuild": "cp index.js dist/index.js",
-        "build:watch": "tsc --watch",
-        "dev": "n8n-node dev",
-        "lint": "n8n-node lint",
-        "lint:fix": "n8n-node lint --fix",
-        "release": "n8n-node release",
-        "prepublishOnly": "n8n-node prerelease"
-    },
+		"build": "npx rimraf dist && tsc && gulp build:icons",
+		"dev": "tsc --watch",
+		"format": "prettier nodes credentials --write",
+		"lint": "eslint nodes credentials package.json",
+		"lintfix": "eslint nodes credentials package.json --fix",
+		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+	},
     "files": [
         "dist"
     ],
@@ -36,20 +42,20 @@
         "n8nNodesApiVersion": 1,
         "strict": true,
         "credentials": [
-            "credentials/moreLoginOAuth2Api.credentials.ts"
+            "dist/credentials/moreLoginOAuth2Api.credentials.ts"
         ],
         "nodes": [
-            "nodes/morelogin/Morelogin.node.ts"
+            "dist/nodes/morelogin/Morelogin.node.ts"
         ]
     },
     "devDependencies": {
-        "@n8n/node-cli": "*",
-        "@types/node": "^25.0.3",
-        "eslint": "9.32.0",
-        "prettier": "3.6.2",
-        "release-it": "^19.0.4",
-        "typescript": "5.9.2"
-    },
+		"@typescript-eslint/parser": "~8.32.0",
+		"eslint": "^8.57.0",
+		"eslint-plugin-n8n-nodes-base": "^1.16.3",
+		"gulp": "^5.0.0",
+		"prettier": "^3.5.3",
+		"typescript": "^5.8.2"
+	},
     "peerDependencies": {
         "n8n-workflow": "*"
     }
