@@ -42,10 +42,10 @@
         "n8nNodesApiVersion": 1,
         "strict": true,
         "credentials": [
-            "dist/credentials/moreLoginOAuth2Api.credentials.ts"
+            "dist/credentials/MoreLoginOAuth2Api.credentials.ts"
         ],
         "nodes": [
-            "dist/nodes/morelogin/Morelogin.node.ts"
+            "dist/nodes/MoreLogin/MoreLogin.node.ts"
         ]
     },
     "devDependencies": {

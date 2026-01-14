@@ -1,6 +1,6 @@
 import { Icon, ICredentialType, INodeProperties } from 'n8n-workflow';
 
-export class moreLoginOAuth2Api implements ICredentialType {
+export class MoreLoginOAuth2Api implements ICredentialType {
 	name = 'moreLoginOAuth2Api';
 
 	displayName = 'MoreLogin OAuth2 API';
