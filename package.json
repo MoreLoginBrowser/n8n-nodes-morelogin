@@ -1,6 +1,6 @@
 {
     "name": "n8n-nodes-morelogin",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "Morelogin node for n8n",
     "license": "MIT",
     "homepage": "https://github.com/MoreLoginBrowser/n8n-nodes-morelogin",
