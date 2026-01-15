@@ -45,7 +45,6 @@ export const scheduleDescription: INodeProperties[] = [
                 name: 'Schedule Recurring Mobile Task',
                 value: 'createSchedule',
                 action: 'Create a schedule',
-                description: 'Automatically wakes up a specific cloud phone instance to execute a scheduled mobile task (e.g. TikTok upload).',
                 routing: {
                     request: {
                         method: 'POST',
@@ -57,7 +56,6 @@ export const scheduleDescription: INodeProperties[] = [
                 name: 'Start Cloud Phone Task',
                 value: 'createOnceSchedule',
                 action: 'Create a once schedule',
-                description: 'Wakes up a specific Cloud Phone instance to run a scheduled automation script (e.g. TikTok upload).',
                 routing: {
                     request: {
                         method: 'POST',
