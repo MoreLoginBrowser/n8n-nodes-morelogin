@@ -1,7 +1,7 @@
 {
     "name": "n8n-nodes-morelogin",
-    "version": "1.0.8",
-    "description": "n8n nodes for Morelogin",
+    "version": "1.0.17",
+    "description": "n8n nodes for MoreLogin",
     "license": "MIT",
     "homepage": "https://github.com/MoreLoginBrowser/n8n-nodes-morelogin",
     "keywords": [
@@ -40,7 +40,6 @@
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": true,
         "credentials": [
             "dist/credentials/MoreLoginOAuth2Api.credentials.js"
         ],

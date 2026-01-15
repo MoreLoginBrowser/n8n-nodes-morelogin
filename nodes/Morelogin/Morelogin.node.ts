@@ -20,11 +20,11 @@ export class MoreLogin implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'MoreLogin',
         name: 'moreLogin',
-        icon: { light: 'file:../../icons/morelogin.svg', dark: 'file:../../icons/morelogin.dark.svg' },
+        icon: { light: 'file:morelogin.svg', dark: 'file:morelogin.dark.svg' },
         group: ['input'],
         version: 1,
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        description: 'Interact with the MoreLogin API',
+        description: 'Automate mobile tasks on secure Cloud-based Android Systems. Manage TikTok, Instagram & social accounts with real device fingerprints.',
         defaults: {
             name: 'MoreLogin',
         },

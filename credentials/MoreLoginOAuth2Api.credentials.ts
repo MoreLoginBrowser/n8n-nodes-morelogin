@@ -7,7 +7,7 @@ export class MoreLoginOAuth2Api implements ICredentialType {
 
 	extends = ['oAuth2Api'];
 
-	icon: Icon = { light: 'file:../icons/morelogin.svg', dark: 'file:../icons/morelogin.dark.svg' };
+	icon: Icon = { light: 'file:morelogin.svg', dark: 'file:morelogin.dark.svg' };
 	
 	documentationUrl = 'https://guide.morelogin.com/api-reference/open-api/open-api/authorization';
 
