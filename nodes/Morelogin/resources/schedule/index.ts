@@ -44,7 +44,7 @@ export const scheduleDescription: INodeProperties[] = [
             {
                 name: 'Schedule Recurring Mobile Task',
                 value: 'createSchedule',
-                action: 'Create a schedule',
+                action: 'Schedule Recurring Mobile Task',
                 routing: {
                     request: {
                         method: 'POST',
@@ -55,7 +55,7 @@ export const scheduleDescription: INodeProperties[] = [
             {
                 name: 'Start Cloud Phone Task',
                 value: 'createOnceSchedule',
-                action: 'Create a once schedule',
+                action: 'Start Cloud Phone Task',
                 routing: {
                     request: {
                         method: 'POST',
